@@ -47,15 +47,16 @@ class TailGatingEnv(SumoEnvironment):
         self.sumo.simulationStep()
         
 
-def create_env(tailgating=False):
+def create_env(tailgating=False, use_gui=False):
     return TailGatingEnv(
         tailgating=tailgating,
         net_file="nets/network.net.xml",
         route_file="nets/flow.rou.xml",
         single_agent=False,
-        use_gui=True,
+        use_gui=use_gui,
         num_seconds=86400,
         yellow_time=3,
         min_green=5,
         max_green=60,
+        sumo_warnings=False,
     )

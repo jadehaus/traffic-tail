@@ -2,8 +2,7 @@ import os
 from argparse import ArgumentParser
 
 from linear_rl.true_online_sarsa import TrueOnlineSarsaLambda
-
-from environment import TailGatingEnv
+from traffic_tail.environment import TailGatingEnv
 
 
 class Trainer(object):
@@ -32,6 +31,7 @@ class Trainer(object):
             yellow_time=3,
             min_green=5,
             max_green=60,
+            sumo_warnings=False,
         )   
         
         self.agents = {
@@ -48,10 +48,9 @@ class Trainer(object):
         }
     
     def train(self, episodes=1):
-        state = self.env.reset()
-        done = {"__all__": False}
-        
-        for _ in range(episodes):
+        for episode in range(episodes):
+            state = self.env.reset()
+            done = {"__all__": False}
             while not done["__all__"]:
                 actions = {
                     ts_id: self.agents[ts_id].act(state[ts_id]) 
@@ -70,7 +69,7 @@ class Trainer(object):
                     )
                     state[ts_id] = next_state[ts_id]
                 
-        self.env.save_csv(self.result_dir)
+            self.env.save_csv(self.result_dir, episode)
         self.env.close()
         return self.agents
 
