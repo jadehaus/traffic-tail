@@ -26,7 +26,7 @@ class TailGatingEnv(SumoEnvironment):
         super(TailGatingEnv, self).__init__(*args, **kwargs)
         self.tailgating = tailgating
                         
-    def _adjust_speed_mode(self, default_mode=31):
+    def _apply_tailgating(self, default_mode=31):
         for tlsID in self.sumo.trafficlight.getIDList():
             controlledLanes = self.sumo.trafficlight.getControlledLanes(tlsID)
             stateString = self.sumo.trafficlight.getRedYellowGreenState(tlsID)
@@ -37,24 +37,36 @@ class TailGatingEnv(SumoEnvironment):
                     if 'y' in stateString[idx]:
                         self.sumo.vehicle.setSpeedMode(vehID, 0)
                     elif 'G' in stateString[idx]:
-                        self.sumo.vehicle.setSpeedMode(vehID, 7)
+                        self.sumo.vehicle.setSpeedMode(vehID, 15)
                     else:
                         self.sumo.vehicle.setSpeedMode(vehID, default_mode)
+            
+    def _apply_realistic_impatience_gap(self):
+        for vehID in self.sumo.vehicle.getIDList():
+            impatience = self.sumo.vehicle.getImpatience(vehID)
+            minGap = 2.5 if impatience < 1 else 0.5
+            self.sumo.vehicle.setMinGap(vehID, minGap)
 
     def _sumo_step(self):
         if self.tailgating:
-            self._adjust_speed_mode()
+            self._apply_tailgating()
+            self._apply_realistic_impatience_gap()
         self.sumo.simulationStep()
         
 
-def create_env(tailgating=False, use_gui=False):
+def create_env(tailgating=False, use_gui=False, num_seconds=7200):
+    net_file = "nets/network.net.xml"
+    route_file = "nets/flow.rou.xml"
+    if tailgating:
+        route_file = "nets/flow_tailgating.rou.xml"
     return TailGatingEnv(
         tailgating=tailgating,
-        net_file="nets/network.net.xml",
-        route_file="nets/flow.rou.xml",
+        net_file=net_file,
+        route_file=route_file,
+        render_mode='rgb_array',
         single_agent=False,
         use_gui=use_gui,
-        num_seconds=86400,
+        num_seconds=num_seconds,
         yellow_time=3,
         min_green=5,
         max_green=60,

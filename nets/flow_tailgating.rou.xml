@@ -1,6 +1,7 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
-	<vType id="car" vClass="passenger" color="255,255,255"/>
+	<vType id="car" vClass="passenger" color="255,255,255"
+		   jmDriveAfterRedTime="0" jmDriveAfterYellowTime="0" jmIgnoreKeepClearTime="1"/>
     <vType id="motorcicle" vClass="motorcycle" color="50,192,192"/>
     <vType id="bus" vClass="bus" color="0,192,0"/>
 	<vType id="emergency" vClass="emergency" color="192,0,0"/>
