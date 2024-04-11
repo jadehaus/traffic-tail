@@ -3,7 +3,6 @@
 본 코드는 2024년도 충청북도교육연구정보원 부설 영재교육원 정보 영재 사사과정 B반에서 진행한 연구 "대한민국 운전자 특성을 반영한 신호 체계 강화 학습"(가칭)의 전체 실험 코드입니다. 강화 학습 환경의 기반이 되는 코드는 [SUMO-RL](https://github.com/LucasAlegre/sumo-rl)을 참고하여 작성하였으며, 시뮬레이션은 SUMO를 사용합니다. 본 연구에서는 SUMO 및 SUMO-RL에서 제공하는 환경을 대한민국 운전자 특성을 반영하도록 수정 및 재구축하여 보다 효과적인 신호 체계 강화 학습 방법을 제시하고자 합니다.
 
 ## Install
--------------
 ### SUMO 설치
 먼저 SUMO를 설치합니다. [SUMO](https://github.com/eclipse/sumo)(Simulation of Urban MObility)는 도시 이동성의 시뮬레이션을 위한 오픈 소스, 휴대 가능, 모듈 식의 소프트웨어 패키지입니다. [SUMO 공식 설치 방법](https://sumo.dlr.de/docs/Installing/index.html)을 참고하여 사용하는 컴퓨터 운영체제에 적합한 프로그램을 설치합니다. Linux 환경을 권장합니다. Mac OS를 사용하는 경우, [Homebrew]()를 먼저 설치한 후, [Mac OS용 SUMO 설치 가이드](https://sumo.dlr.de/docs/Installing/index.html#macos)를 참고하여 SUMO를 설치해야합니다. 
 
@@ -40,7 +39,6 @@ pip install -r requirements.txt
 ```
 
 ## 코드 구조 설명
------------
 본 코드는 아래와 같이 구성되어 있습니다.
 ```
 .
@@ -64,7 +62,6 @@ pip install -r requirements.txt
 
 
 ## 환경 설명
------------
 환경은 [SUMO-RL](https://github.com/LucasAlegre/sumo-rl)의 `SumoEnvironment`를 상속받아 구현되었으며, 아래는 공유하는 기본 틀에 대한 설명입니다.
 
 ### 상태(State)
