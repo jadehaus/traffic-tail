@@ -36,8 +36,6 @@ class TailGatingEnv(SumoEnvironment):
                 for vehID in vehicles:
                     if 'y' in stateString[idx]:
                         self.sumo.vehicle.setSpeedMode(vehID, 0)
-                    elif 'G' in stateString[idx]:
-                        self.sumo.vehicle.setSpeedMode(vehID, 15)
                     else:
                         self.sumo.vehicle.setSpeedMode(vehID, default_mode)
             

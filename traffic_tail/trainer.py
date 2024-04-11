@@ -14,6 +14,7 @@ class SUMOTrainer(object):
     """
     def __init__(self, env='default', num_seconds=7200, use_gui=False):
         self.result_dir = f"results/{env}"
+        self.best_reward = -float('inf')
         
         if env == 'default':
             tailgating = False
@@ -28,6 +29,7 @@ class SUMOTrainer(object):
             num_seconds=num_seconds,
         )
         
+        print(f"Initializing RL agents. (This may take a while)")
         self.agents = {
             ts_id: TrueOnlineSarsaLambda(
                 self.env.observation_spaces(ts_id),
@@ -70,10 +72,15 @@ class SUMOTrainer(object):
                 total_reward += sum(reward.values())
                 pbar.update(self.env.delta_time)
             
-            self.env.save_csv(self.result_dir, episode)
+            self.save(f'{self.result_dir}/pretrained_agents_run_{episode}.pkl')
             pbar.set_description(
                 f"Episode {episode}/{episodes}: Total Reward {total_reward:.3f}"
             )
+            
+            if total_reward > self.best_reward:
+                self.best_reward = total_reward
+                self.save(f'{self.result_dir}/best_agents.pkl')
+            
         self.env.close()
         return self.agents
     
