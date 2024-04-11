@@ -55,20 +55,24 @@ class TailGatingEnv(SumoEnvironment):
         
 
 def create_env(tailgating=False, use_gui=False, num_seconds=7200):
-    net_file = "nets/network.net.xml"
-    route_file = "nets/flow.rou.xml"
     if tailgating:
+        print("Using custom environment with tailgating behavior.")
+        net_file = "nets/network.net.xml"
         route_file = "nets/flow_tailgating.rou.xml"
+    else:
+        print("Using default SUMO environment.")
+        net_file = "nets/network.net.xml"
+        route_file = "nets/flow_default.rou.xml"
     return TailGatingEnv(
         tailgating=tailgating,
         net_file=net_file,
         route_file=route_file,
-        render_mode='rgb_array',
         single_agent=False,
         use_gui=use_gui,
         num_seconds=num_seconds,
         yellow_time=3,
         min_green=5,
         max_green=60,
+        delta_time=5,
         sumo_warnings=False,
     )

@@ -15,3 +15,4 @@ sumolib==1.19.0
 traci==1.19.0
 tzdata==2024.1
 tqdm==4.66.2
+xvfbwrapper==0.2.9

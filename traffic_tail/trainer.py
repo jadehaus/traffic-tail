@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 
 from tqdm import tqdm
 from linear_rl.true_online_sarsa import TrueOnlineSarsaLambda
-from traffic_tail.environment import TailGatingEnv
+from traffic_tail.environment import create_env
 
 
 class SUMOTrainer(object):
@@ -14,31 +14,19 @@ class SUMOTrainer(object):
     """
     def __init__(self, env='default', num_seconds=7200, use_gui=False):
         self.result_dir = f"results/{env}"
-        net_file = "nets/network.net.xml"
         
         if env == 'default':
             tailgating = False
-            route_file = "nets/flow.rou.xml"
         elif env == 'tailgating':
             tailgating = True
-            route_file = "nets/flow_tailgating.rou.xml"
         else:
             raise ValueError(f"Invalid environment {env}")
         
-        self.env = TailGatingEnv(
+        self.env = create_env(
             tailgating=tailgating,
-            net_file=net_file,
-            route_file=route_file,
-            out_csv_name=self.result_dir,
-            render_mode='rgb_array',
-            single_agent=False,
             use_gui=use_gui,
             num_seconds=num_seconds,
-            yellow_time=3,
-            min_green=5,
-            max_green=60,
-            sumo_warnings=False,
-        )   
+        )
         
         self.agents = {
             ts_id: TrueOnlineSarsaLambda(
@@ -89,13 +77,18 @@ class SUMOTrainer(object):
         self.env.close()
         return self.agents
     
-    def save(self, path):
+    def save(self, path=None):
+        if path is None:
+            path = os.path.join(
+                self.result_dir, 
+                'pretrained_agents.pkl'
+            )
         with open(path, 'wb') as f:
-            pickle.dump(self, f)
+            pickle.dump(self.agents, f)
             
     def load(self, path):
         with open(path, 'rb') as f:
-            self = pickle.load(f)
+            self.agents = pickle.load(f)
         return self
 
 
