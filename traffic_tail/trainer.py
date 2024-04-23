@@ -18,13 +18,22 @@ class SUMOTrainer(object):
         
         if env == 'default':
             tailgating = False
+            default_mode = 31
         elif env == 'tailgating':
             tailgating = True
+            default_mode = 31
+        elif env == 'overspeed':
+            tailgating = False
+            default_mode = 24
+        elif env == 'impatience':
+            tailgating = True
+            default_mode = 24
         else:
             raise ValueError(f"Invalid environment {env}")
         
         self.env = create_env(
             tailgating=tailgating,
+            default_mode=default_mode,
             use_gui=use_gui,
             num_seconds=num_seconds,
         )
@@ -72,7 +81,7 @@ class SUMOTrainer(object):
                 total_reward += sum(reward.values())
                 pbar.update(self.env.delta_time)
             
-            self.save(f'{self.result_dir}/pretrained_agents_run_{episode}.pkl')
+            # self.save(f'{self.result_dir}/pretrained_agents_run_{episode}.pkl')
             pbar.set_description(
                 f"Episode {episode}/{episodes}: Total Reward {total_reward:.3f}"
             )

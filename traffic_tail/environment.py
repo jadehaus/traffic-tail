@@ -22,11 +22,16 @@ run a red light even if the intersection is occupied [1 0 0 1 1 1] = 39 (also re
 
 
 class TailGatingEnv(SumoEnvironment):
-    def __init__(self, tailgating=True, *args, **kwargs):
+    def __init__(self, tailgating=True, default_mode=31, *args, **kwargs):
         super(TailGatingEnv, self).__init__(*args, **kwargs)
         self.tailgating = tailgating
+        self.default_mode = default_mode
+
+    def _set_default_mode(self):
+        for vehID in self.sumo.vehicle.getIDList():
+            self.sumo.vehicle.setSpeedMode(vehID, self.default_mode)
                         
-    def _apply_tailgating(self, default_mode=31):
+    def _apply_tailgating(self):
         for tlsID in self.sumo.trafficlight.getIDList():
             controlledLanes = self.sumo.trafficlight.getControlledLanes(tlsID)
             stateString = self.sumo.trafficlight.getRedYellowGreenState(tlsID)
@@ -36,8 +41,6 @@ class TailGatingEnv(SumoEnvironment):
                 for vehID in vehicles:
                     if 'y' in stateString[idx]:
                         self.sumo.vehicle.setSpeedMode(vehID, 0)
-                    else:
-                        self.sumo.vehicle.setSpeedMode(vehID, default_mode)
             
     def _apply_realistic_impatience_gap(self):
         for vehID in self.sumo.vehicle.getIDList():
@@ -46,13 +49,14 @@ class TailGatingEnv(SumoEnvironment):
             self.sumo.vehicle.setMinGap(vehID, minGap)
 
     def _sumo_step(self):
+        self._set_default_mode()
         if self.tailgating:
             self._apply_tailgating()
             self._apply_realistic_impatience_gap()
         self.sumo.simulationStep()
         
 
-def create_env(tailgating=False, use_gui=False, num_seconds=7200):
+def create_env(tailgating=False, use_gui=False, num_seconds=7200, default_mode=31):
     if tailgating:
         print("Using custom environment with tailgating behavior.")
         net_file = "nets/network.net.xml"
@@ -63,6 +67,7 @@ def create_env(tailgating=False, use_gui=False, num_seconds=7200):
         route_file = "nets/flow_default.rou.xml"
     return TailGatingEnv(
         tailgating=tailgating,
+        default_mode=default_mode,
         net_file=net_file,
         route_file=route_file,
         single_agent=False,
