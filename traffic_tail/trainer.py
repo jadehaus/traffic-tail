@@ -12,31 +12,10 @@ class SUMOTrainer(object):
     Main training code.
     Train a DQN model for each module in the environment.
     """
-    def __init__(self, env='default', num_seconds=7200, use_gui=False):
-        self.result_dir = f"results/{env}"
+    def __init__(self, env_config):
+        self.result_dir = f"results/{env_config.name}"
         self.best_reward = -float('inf')
-        
-        if env == 'default':
-            tailgating = False
-            default_mode = 31
-        elif env == 'tailgating':
-            tailgating = True
-            default_mode = 31
-        elif env == 'overspeed':
-            tailgating = False
-            default_mode = 24
-        elif env == 'impatience':
-            tailgating = True
-            default_mode = 24
-        else:
-            raise ValueError(f"Invalid environment {env}")
-        
-        self.env = create_env(
-            tailgating=tailgating,
-            default_mode=default_mode,
-            use_gui=use_gui,
-            num_seconds=num_seconds,
-        )
+        self.env = create_env(env_config)
         
         print(f"Initializing RL agents. (This may take a while)")
         self.agents = {
@@ -52,7 +31,8 @@ class SUMOTrainer(object):
             for ts_id in self.env.ts_ids
         }
     
-    def train(self, episodes=1):
+    def train(self, episodes=1, run=None):
+        self.total_rewards = []
         pbar = tqdm(range(episodes * self.env.sim_max_time))
         for episode in range(episodes):
             total_reward = 0
@@ -82,13 +62,19 @@ class SUMOTrainer(object):
                 pbar.update(self.env.delta_time)
             
             # self.save(f'{self.result_dir}/pretrained_agents_run_{episode}.pkl')
+            self.total_rewards.append(total_reward)
             pbar.set_description(
                 f"Episode {episode}/{episodes}: Total Reward {total_reward:.3f}"
             )
             
+            if run is not None:
+                save_dir = f"{self.result_dir}/best_agents_run_{run}.pkl"
+            else:
+                save_dir = f"{self.result_dir}/best_agents.pkl"
+            
             if total_reward > self.best_reward:
                 self.best_reward = total_reward
-                self.save(f'{self.result_dir}/best_agents.pkl')
+                self.save(save_dir)
             
         self.env.close()
         return self.agents
