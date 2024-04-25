@@ -52,7 +52,7 @@ class TailGatingEnv(SumoEnvironment):
         self._set_default_mode()
         if self.tailgating:
             self._apply_tailgating()
-            self._apply_realistic_impatience_gap()
+            # self._apply_realistic_impatience_gap()
         self.sumo.simulationStep()
         
 

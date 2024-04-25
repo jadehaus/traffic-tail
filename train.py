@@ -52,7 +52,7 @@ def run_experiment(config):
     reward_curve = []
     for seed in range(NUM_SEEDS):
         trainer_default = SUMOTrainer(config)
-        trainer_default.train(episodes=NUM_EPISODES, run=seed)
+        trainer_default.train(episodes=NUM_EPISODES)
         reward_curve.append(trainer_default.total_rewards)
         
     reward_curve = np.array(reward_curve)
@@ -66,5 +66,7 @@ if __name__ == '__main__':
     tailgating_config = TailgatingConfig()
     tailgating_overspeed_config = TailgatingOverspeedConfig()
     
-    for config in [default_config, overspeed_config, tailgating_config, tailgating_overspeed_config]:
-        run_experiment(config)
+    # for config in [default_config, overspeed_config, tailgating_config, tailgating_overspeed_config]:
+    #     run_experiment(config)
+
+    run_experiment(tailgating_overspeed_config)
