@@ -118,3 +118,21 @@ $$
 신호가 바뀌기 1초 전에는 차량을 정지합니다. 또한, `jmIgnoreKeepClearTime`가 $-1$인 경우, 운전자는 항상 교차로가 비워지기 전까지 대기합니다. 즉, 청색 신호가 켜진 상태라도 교차로에 차가 대기하는 중이라면 교차로에 진입하지 않습니다.
 
 이 외의 교차로 모델에 대한 자세한 설명은 [SUMO 공식 사이트](https://sumo.dlr.de/docs/Definition_of_Vehicles%2C_Vehicle_Types%2C_and_Routes.html#junction_model_parameters)의 설명을 참고해 주세요.
+
+
+# 난폭택시 적용
+1. 택시에 대해 운전모드 0, 최고 난폭모드
+```py
+for vehID in env.sumo.vehicle.getIDList():
+        if 'taxi' in vehID:
+            env.sumo.vehicle.setSpeedMode(vehID, 0)
+```
+2. 모든 도로의 제한속도 3배 높이기
+```xml
+<edge id=":ABS_0" function="internal">
+	<lane id=":ABS_0_0" index="0" speed="45.837" length="8.20" shape="-54.00,42.00 -51.54,41.50 -50.00,40.40 -48.46,39.30 -46.00,38.80"/>
+	<lane id=":ABS_0_1" index="1" speed="45.837" length="8.20" shape="-54.00,42.00 -46.00,42.00"/>
+	<lane id=":ABS_0_2" index="2" speed="45.837" length="8.20" shape="-54.00,45.20 -46.00,45.20"/>
+	<lane id=":ABS_0_3" index="3" speed="45.837" length="8.20" shape="-54.00,48.40 -46.00,48.40"/>
+</edge>
+```
