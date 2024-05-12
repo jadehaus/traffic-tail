@@ -13,7 +13,7 @@ class SUMOTrainer(object):
     Train a DQN model for each module in the environment.
     """
     def __init__(self, env_config):
-        self.result_dir = f"results/{env_config.name}"
+        self.result_dir = f"/mnt/d/Working_/GitHub/traffic-tail/results/{env_config.name}"
         self.best_reward = -float('inf')
         self.env = create_env(env_config)
         

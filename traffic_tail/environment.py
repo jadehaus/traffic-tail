@@ -11,6 +11,8 @@ bit4: Brake hard to avoid passing a red light
 bit5: Disregard right of way within intersections (only applies to foe vehicles that have entered the intersection).
 Setting the bit enables the check (the according value is regarded), keeping the bit==zero disables the check.
 
+
+
 Examples:
 default (all checks on) -> [0 1 1 1 1 1] -> Speed Mode = 31
 most checks off (legacy) -> [0 0 0 0 0 0] -> Speed Mode = 0
@@ -30,6 +32,7 @@ class TailGatingEnv(SumoEnvironment):
     def _set_default_mode(self):
         for vehID in self.sumo.vehicle.getIDList():
             self.sumo.vehicle.setSpeedMode(vehID, self.default_mode)
+        print(self.sumo.vehicle.getIDList())
                         
     def _apply_tailgating(self):
         for tlsID in self.sumo.trafficlight.getIDList():
@@ -41,6 +44,7 @@ class TailGatingEnv(SumoEnvironment):
                 for vehID in vehicles:
                     if 'y' in stateString[idx]:
                         self.sumo.vehicle.setSpeedMode(vehID, 0)
+                    
             
     def _apply_realistic_impatience_gap(self):
         for vehID in self.sumo.vehicle.getIDList():
@@ -55,15 +59,17 @@ class TailGatingEnv(SumoEnvironment):
             # self._apply_realistic_impatience_gap()
         self.sumo.simulationStep()
         
+        
+        
 
 def create_env(env_config):
     print(f"Creating {env_config.name} environment.")
     if env_config.tailgating:
-        net_file = "nets/network.net.xml"
-        route_file = "nets/flow_tailgating.rou.xml"
+        net_file = "/mnt/d/Working_/GitHub/traffic-tail/nets/network.net.xml"
+        route_file = "/mnt/d/Working_/GitHub/traffic-tail/nets/flow_tailgating.rou.xml"
     else:
-        net_file = "nets/network.net.xml"
-        route_file = "nets/flow_default.rou.xml"
+        net_file = "/mnt/d/Working_/GitHub/traffic-tail/nets/network.net.xml"
+        route_file = "/mnt/d/Working_/GitHub/traffic-tail/nets/flow_default.rou.xml"
     return TailGatingEnv(
         tailgating=env_config.tailgating,
         default_mode=env_config.default_mode,

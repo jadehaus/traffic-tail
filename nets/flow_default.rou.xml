@@ -1,9 +1,11 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
-	<vType id="car" vClass="passenger" color="255,255,255"/>
-    <vType id="motorcicle" vClass="motorcycle" color="50,192,192"/>
-    <vType id="bus" vClass="bus" color="0,192,0"/>
-	<vType id="emergency" vClass="emergency" color="192,0,0"/>
+	<vType id="car" vClass="passenger" color="255,255,255" speedFactor="0.3"/>
+    <vType id="motorcicle" vClass="motorcycle" color="50,192,192" speedFactor="0.3"/>
+    <vType id="bus" vClass="bus" color="0,192,0" speedFactor="0.3"/>
+	<vType id="emergency" vClass="emergency" color="192,0,0" speedFactor="0.3"/>
+	<vType id="taxi" vClass="taxi" color="252,186,3"
+		   jmDriveAfterRedTime="5" jmDriveAfterYellowTime="3" jmIgnoreKeepClearTime="2" speedFactor="1.0" minGap="0.1" accel="5.0"/>
 
 	<route id="AC" edges="AB1 AB2 BC1 BC2" />
 	<route id="AD" edges="AB1 AB2 BD1 BD2" />
@@ -36,6 +38,37 @@
 	<route id="HF" edges="HE1 HE2 EF1 EF2" />
 	<route id="HG" edges="HE1 HE2 EG1 EG2" />
 
+
+	<flow id="taxi_AC" type="taxi" route="AC" begin="0" end="86400" probability="0.0011" />
+	<flow id="taxi_AD" type="taxi" route="AD" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_AF" type="taxi" route="AF" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_AG" type="taxi" route="AG" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_AH" type="taxi" route="AH" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_CA" type="taxi" route="CA" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_CD" type="taxi" route="CD" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_CF" type="taxi" route="CF" begin="0" end="86400" probability="0.0012" />
+	<flow id="taxi_CG" type="taxi" route="CG" begin="0" end="86400" probability="0.0016" />
+	<flow id="taxi_CH" type="taxi" route="CH" begin="0" end="86400" probability="0.0017" />
+	<flow id="taxi_DA" type="taxi" route="DA" begin="0" end="86400" probability="0.0011" />
+	<flow id="taxi_DC" type="taxi" route="DC" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_DF" type="taxi" route="DF" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_DG" type="taxi" route="DG" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_DH" type="taxi" route="DH" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_FA" type="taxi" route="FA" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_FC" type="taxi" route="FC" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_FD" type="taxi" route="FD" begin="0" end="86400" probability="0.0012" />
+	<flow id="taxi_FG" type="taxi" route="FG" begin="0" end="86400" probability="0.0016" />
+	<flow id="taxi_FH" type="taxi" route="FH" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_GA" type="taxi" route="GA" begin="0" end="86400" probability="0.0011" />
+	<flow id="taxi_GC" type="taxi" route="GC" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_GD" type="taxi" route="GD" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_GF" type="taxi" route="GF" begin="0" end="86400" probability="0.0014" />
+	<flow id="taxi_GH" type="taxi" route="GH" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_HA" type="taxi" route="HA" begin="0" end="86400" probability="0.0015" />
+	<flow id="taxi_HC" type="taxi" route="HC" begin="0" end="86400" probability="0.0013" />
+	<flow id="taxi_HD" type="taxi" route="HD" begin="0" end="86400" probability="0.0012" />
+	<flow id="taxi_HF" type="taxi" route="HF" begin="0" end="86400" probability="0.0016" />
+	<flow id="taxi_HG" type="taxi" route="HG" begin="0" end="86400" probability="0.0017" />
 
 	<flow id="bus_AC" type="bus" route="AC" begin="0" end="86400" probability="0.0011" />
 	<flow id="bus_AD" type="bus" route="AD" begin="0" end="86400" probability="0.0014" />

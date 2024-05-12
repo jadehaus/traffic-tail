@@ -10,7 +10,7 @@ from traffic_tail.environment import create_env
 from traffic_tail.trainer import SUMOTrainer
 
 
-USE_SUMO_GUI = False
+USE_SUMO_GUI = True
 TOTAL_TIME = 900
 NUM_SEEDS = 5
 NUM_EPISODES = 20
